@@ -13,17 +13,27 @@ namespace Crawler.Service
         {
             var apemipDataList = new List<Apemip>();
             var start = 0;
-
+            var load = 0;
             for (int pageSearch = 1; pageSearch <= 219; pageSearch++)
             {
+                Loading(ref load, pageSearch);
+
                 var parameters = GetParameters(page: pageSearch, start: start += 10);
                 var jsonString = await HttpService.HttpGet(_url + parameters);
                 var json = JObject.Parse(jsonString);
 
                 ParseJsonToApemip(json, ref apemipDataList);
             }
-
             return apemipDataList;
+        }
+
+        private static void Loading(ref int load, int currently) 
+        {
+            Tools.ClearLines();
+            System.Console.WriteLine($"{currently:000} - Loading... {Tools.LoadingCircle(load)}");
+            load++;
+            if (load == 8)
+                load = 0;
         }
 
         private static void ParseJsonToApemip(JObject json, ref List<Apemip> apemipDataList) 

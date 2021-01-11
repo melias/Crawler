@@ -15,17 +15,26 @@ namespace ExtractWebData
             Console.WriteLine("-------------------------");
 
             var key = Console.ReadKey().Key;
-
+            string path;
             if (key == ConsoleKey.D1)
             {
                 var result = await ImpicService.DoWork();
-                FileService.SaveReport(items: result, path: @"C:\temp\impic_crawler.csv");
+                path = @"C:\temp\impic_crawler.csv";
+                FileService.SaveReport(items: result, path: path);
             }
             else if (key == ConsoleKey.D2)
             {
                 var result = await ApemipService.DoWork();
-                FileService.SaveReport(items: result, path: @"C:\temp\apemip_crawler.csv");
+                path = @"C:\temp\apemip_crawler.csv";
+                FileService.SaveReport(items: result, path: path);
             }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            Tools.ClearLines();
+            Console.WriteLine($"finished work, go to: {path}");
         }
     }
 }
